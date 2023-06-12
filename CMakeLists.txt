@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.18)
+project(nginx)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_FLAGS "-g -rdynamic")
+set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+
+include_directories(objs)
+include_directories(include/core)
+include_directories(include/event)
+include_directories(include/os/unix)
+include_directories(include/stream)
+
+aux_source_directory(source/core SOURCE)
+aux_source_directory(source/event SOURCE)
+aux_source_directory(source/event/modules SOURCE)
+aux_source_directory(source/os/unix SOURCE)
+aux_source_directory(source/stream SOURCE)
+
+add_executable(nginx nginx.c objs/ngx_modules.c ${SOURCE})
+target_link_libraries(nginx pthread)
+target_link_libraries(nginx crypt)
+target_link_libraries(nginx crypto)
+target_link_libraries(nginx ssl)
+target_link_libraries(nginx pcre)
+target_link_libraries(nginx dl)
+target_link_libraries(nginx z)
